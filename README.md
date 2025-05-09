@@ -123,7 +123,7 @@ Para generar la base de datos utilizando Prisma, sigue estos pasos:
 ```
 npx prisma generate
 npx prisma migrate dev
-ts-node seed.ts
+npx ts-node prisma/seed.ts
 ```
 
 Una vez has dado todos los pasos, deberías poder guardar nuevos candidatos, tanto via web, como via API, verlos en la base de datos y obtenerlos mediante GET por id. 
