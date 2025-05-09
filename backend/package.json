@@ -10,7 +10,12 @@
         "test": "jest",
         "prisma:init": "npx prisma init",
         "prisma:generate": "npx prisma generate",
-        "start:prod": "npm run build && npm start"
+        "start:prod": "npm run build && npm start",
+        "test:db:setup": "node scripts/test-setup.js",
+        "test:setup": "npm run test:db:setup"
+    },
+    "prisma": {
+        "seed": "ts-node prisma/seed.ts"
     },
     "keywords": [],
     "author": "",
