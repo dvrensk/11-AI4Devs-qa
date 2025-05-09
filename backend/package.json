@@ -6,6 +6,7 @@
     "scripts": {
         "start": "node dist/index.js",
         "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+        "start:test": "NODE_ENV=test PORT=3011 ts-node-dev --respawn --transpile-only src/index.ts",
         "build": "tsc",
         "test": "jest",
         "prisma:init": "npx prisma init",

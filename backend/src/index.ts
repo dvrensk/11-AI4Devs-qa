@@ -16,7 +16,11 @@ declare global {
   }
 }
 
-dotenv.config();
+if (process.env.NODE_ENV === 'test') {
+  dotenv.config({ path: '.env.test' });
+} else {
+  dotenv.config();
+}
 const prisma = new PrismaClient();
 
 export const app = express();
