@@ -1,7 +1,5 @@
 import { updateCandidateStage } from './candidateService';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../../lib/prisma';
 
 jest.mock('@prisma/client', () => {
   const mockPrisma = {

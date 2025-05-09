@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../lib/prisma';
 import { Position } from '../../domain/models/Position';
-
-const prisma = new PrismaClient();
 
 const calculateAverageScore = (interviews: any[]) => {
     if (interviews.length === 0) return 0;

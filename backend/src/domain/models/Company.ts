@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Prisma } from '@prisma/client';
+import prisma from '../../lib/prisma';
 
 export class Company {
     id?: number;

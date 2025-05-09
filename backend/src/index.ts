@@ -1,27 +1,40 @@
 import { Request, Response, NextFunction } from 'express';
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
 import candidateRoutes from './routes/candidateRoutes';
 import positionRoutes from './routes/positionRoutes';
 import { uploadFile } from './application/services/fileUploadService';
 import cors from 'cors';
 
+// Load environment variables first - must be done before importing Prisma client
+if (process.env.NODE_ENV === 'test') {
+  const result = dotenv.config({ path: '.env.test' });
+  if (result.error) {
+    console.error('Error loading .env.test file:', result.error);
+    throw new Error('Failed to load .env.test file');
+  } else {
+    console.log('Loaded TEST environment from .env.test');
+  }
+} else {
+  const result = dotenv.config();
+  if (result.error) {
+    console.error('Error loading .env file:', result.error);
+  } else {
+    console.log('Loaded DEV environment from .env');
+  }
+}
+
+// Import Prisma client after environment variables are loaded
+import prisma from './lib/prisma';
+
 // Extender la interfaz Request para incluir prisma
 declare global {
   namespace Express {
     interface Request {
-      prisma: PrismaClient;
+      prisma: typeof prisma;
     }
   }
 }
-
-if (process.env.NODE_ENV === 'test') {
-  dotenv.config({ path: '.env.test' });
-} else {
-  dotenv.config();
-}
-const prisma = new PrismaClient();
 
 export const app = express();
 export default app;
@@ -69,6 +82,27 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send('Something broke!');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+// Start the server with database information for visibility
+const startServer = async () => {
+  try {
+    const result = await prisma.$queryRaw`SELECT current_database() as db_name`;
+    const dbName = (result as any)[0].db_name;
+    console.log(`Using database: ${dbName}`);
+
+    app.listen(port, () => {
+      console.log(`Server is running at http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error('Error getting database information:', error);
+    app.listen(port, () => {
+      console.log(`Server is running at http://localhost:${port}`);
+    });
+  }
+};
+
+// Ensure proper cleanup on application termination
+process.on('beforeExit', async () => {
+  await prisma.$disconnect();
 });
+
+startServer();

@@ -1,10 +1,9 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { Education } from './Education';
 import { WorkExperience } from './WorkExperience';
 import { Resume } from './Resume';
 import { Application } from './Application';
-
-const prisma = new PrismaClient();
+import prisma from '../../lib/prisma';
 
 export class Candidate {
     id?: number;

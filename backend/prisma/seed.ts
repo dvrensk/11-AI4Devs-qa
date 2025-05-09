@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
+// Keep using a separate PrismaClient instance for seeding
+// as it might run in a different context than the main application
 const prisma = new PrismaClient();
 
 async function main() {
