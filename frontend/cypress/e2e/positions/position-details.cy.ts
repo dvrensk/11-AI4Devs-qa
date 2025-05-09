@@ -17,39 +17,34 @@ describe('Position Details Page', () => {
 
         // 2. Verify columns for each phase of the hiring process
         cy.get('.card-header').should('be.visible');
-        cy.get('.card-header').should('have.length.at.least', 1);
+        cy.get('.card-header').should('have.length.at.least', 3);
 
-        // Verify column titles match expected phases
-        cy.get('.card-header').each(($header) => {
-            // Each column should have a non-empty title
-            cy.wrap($header).should('not.be.empty');
-        });
+        // Verify specific column titles match expected phases
+        cy.get('.card-header').eq(0).should('contain', 'Initial Screening');
+        cy.get('.card-header').eq(1).should('contain', 'Technical Interview');
+        cy.get('.card-header').eq(2).should('contain', 'Manager Interview');
 
-        // 3. Verify candidate cards in columns
-        // Check if there are any candidates
-        cy.get('.card-body .card').then(($cards) => {
-            if ($cards.length > 0) {
-                // Verify candidate cards have names
-                cy.get('.card-body .card .card-title').should('be.visible');
-                cy.get('.card-body .card .card-title').should('not.be.empty');
+        // 3. Verify specific candidate names in columns
+        // Check Initial Screening column for Carlos García
+        cy.get('.card-header').eq(0).parent().find('.card-body .card .card-title')
+          .should('contain', 'Carlos García');
 
-                // Verify candidates appear in columns based on their current phase
-                cy.get('[data-rbd-draggable-id]').should('exist');
+        // Check Technical Interview column for Jane Smith and John Doe
+        cy.get('.card-header').eq(1).parent().find('.card-body .card .card-title')
+          .then(($candidates) => {
+              expect($candidates.text()).to.include('Jane Smith');
+              expect($candidates.text()).to.include('John Doe');
+          });
 
-                // 4. Verify candidate details view
-                // Click on the first candidate card
-                cy.get('.card-body .card').first().click();
+        // 4. Verify candidate details view
+        // Click on the first candidate card
+        cy.get('.card-body .card').first().click();
 
-                // Verify the offcanvas with candidate details appears
-                cy.get('.offcanvas.show').should('be.visible');
-                cy.get('.offcanvas-title').should('contain', 'Detalles del Candidato');
+        // Verify the offcanvas with candidate details appears
+        cy.get('.offcanvas.show').should('be.visible');
+        cy.get('.offcanvas-title').should('contain', 'Detalles del Candidato');
 
-                // Check that candidate information is displayed
-                cy.get('.offcanvas-body h5').should('be.visible');
-            } else {
-                // If no candidates, fail the test
-                throw new Error('No candidate cards found. Test failed.');
-            }
-        });
+        // Check that candidate information is displayed
+        cy.get('.offcanvas-body h5').should('be.visible');
     });
 });
