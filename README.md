@@ -68,7 +68,7 @@ npm install
 ```
 cd backend
 npm run build
-````
+```
 4. Inicia el servidor backend:
 ```
 cd backend
@@ -124,6 +124,38 @@ Para generar la base de datos utilizando Prisma, sigue estos pasos:
 npx prisma generate
 npx prisma migrate dev
 npx ts-node prisma/seed.ts
+```
+
+## Pruebas End-to-End (E2E)
+
+El proyecto incluye pruebas end-to-end utilizando Cypress. Estas pruebas verifican el funcionamiento completo de la aplicación, desde el frontend hasta el backend. Sigue estos pasos para ejecutar las pruebas E2E:
+
+1. Asegúrate de tener Docker en funcionamiento y la base de datos configurada.
+
+2. Navega al directorio del frontend:
+```
+cd frontend
+```
+
+3. Para abrir Cypress en modo interactivo y ejecutar pruebas manualmente:
+```
+npm run cypress:open
+```
+
+4. Para ejecutar todas las pruebas E2E en modo headless (sin interfaz gráfica):
+```
+npm run test:e2e:full
+```
+
+Este comando:
+- Inicia el frontend en el puerto 3001 (versión de prueba)
+- Inicia el backend en el puerto 3011 (versión de prueba)
+- Configura la base de datos de pruebas
+- Ejecuta todas las pruebas de Cypress
+
+5. Si ya tienes el frontend en ejecución y solo quieres ejecutar las pruebas:
+```
+npm run test:e2e
 ```
 
 Una vez has dado todos los pasos, deberías poder guardar nuevos candidatos, tanto via web, como via API, verlos en la base de datos y obtenerlos mediante GET por id. 
